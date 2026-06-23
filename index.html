@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Daily Birthday Gift</title>
+  <style>
+    :root {
+      --pink: #ff5fa2;
+      --hot-pink: #ff2f86;
+      --soft-pink: #ffe3ef;
+      --purple: #7b61ff;
+      --text: #2f2430;
+      --card: rgba(255,255,255,0.88);
+      --shadow: 0 18px 45px rgba(255, 95, 162, 0.25);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, #fff5a8 0, transparent 32%),
+        radial-gradient(circle at bottom right, #c8b6ff 0, transparent 34%),
+        linear-gradient(135deg, #ffe3ef 0%, #fff7fb 48%, #e9e2ff 100%);
+      overflow-x: hidden;
+    }
+
+    .floating-heart {
+      position: fixed;
+      bottom: -40px;
+      color: rgba(255, 47, 134, 0.55);
+      animation: floatUp linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(-115vh) rotate(360deg); opacity: 0; }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+    }
+
+    .card {
+      width: min(980px, 100%);
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.75);
+      border-radius: 34px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+    }
+
+    .hero {
+      padding: 38px 30px 24px;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(255,95,162,0.16), rgba(123,97,255,0.16));
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: white;
+      color: var(--hot-pink);
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(255, 95, 162, 0.18);
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.15rem, 6vw, 4.5rem);
+      line-height: 1.02;
+      letter-spacing: -1.4px;
+    }
+
+    .subtitle {
+      max-width: 700px;
+      margin: 16px auto 0;
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      line-height: 1.55;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      padding: 24px 30px 4px;
+    }
+
+    .time-box {
+      background: white;
+      border-radius: 24px;
+      padding: 20px 10px;
+      text-align: center;
+      box-shadow: 0 12px 28px rgba(123, 97, 255, 0.13);
+      border: 1px solid rgba(255, 95, 162, 0.16);
+    }
+
+    .time-box .number {
+      display: block;
+      font-size: clamp(2rem, 7vw, 4.4rem);
+      font-weight: 900;
+      color: var(--hot-pink);
+      line-height: 1;
+    }
+
+    .time-box .label {
+      display: block;
+      margin-top: 8px;
+      font-weight: 700;
+      color: #6b5d6d;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      letter-spacing: 1px;
+    }
+
+    .content {
+      padding: 26px 30px 34px;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 22px;
+    }
+
+    .panel {
+      background: rgba(255,255,255,0.72);
+      border-radius: 26px;
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    h2 {
+      margin: 0 0 10px;
+      font-size: 1.55rem;
+    }
+
+    p {
+      line-height: 1.55;
+      margin: 10px 0;
+    }
+
+    .gift-box {
+      text-align: center;
+    }
+
+    .gift-emoji {
+      font-size: 5rem;
+      margin: 8px 0 12px;
+      filter: drop-shadow(0 10px 18px rgba(255, 47, 134, 0.25));
+      animation: bounce 1.8s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .button-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+
+    button {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 20px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s ease;
+    }
+
+    button:hover { transform: translateY(-2px); }
+
+    .primary {
+      color: white;
+      background: linear-gradient(135deg, var(--hot-pink), var(--purple));
+      box-shadow: 0 12px 24px rgba(255, 47, 134, 0.27);
+    }
+
+    .secondary {
+      color: var(--hot-pink);
+      background: #fff;
+      box-shadow: 0 10px 20px rgba(123, 97, 255, 0.12);
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .message {
+      margin-top: 18px;
+      padding: 16px;
+      border-radius: 20px;
+      background: #fff6fb;
+      border: 1px dashed rgba(255, 47, 134, 0.35);
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-weight: 700;
+      color: #4b3a4d;
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      background: white;
+      border-radius: 18px;
+      padding: 13px;
+      text-align: center;
+      border: 1px solid rgba(255, 95, 162, 0.12);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.35rem;
+      color: var(--purple);
+    }
+
+    .stat span {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #7b6d7c;
+    }
+
+    .ideas {
+      display: grid;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .idea {
+      background: white;
+      border-radius: 18px;
+      padding: 12px 14px;
+      border-left: 5px solid var(--pink);
+      box-shadow: 0 10px 20px rgba(255, 95, 162, 0.09);
+      font-weight: 700;
+    }
+
+    .footer-note {
+      padding: 0 30px 30px;
+      text-align: center;
+      color: #6d5e6f;
+      font-weight: 700;
+    }
+
+    .birthday-mode {
+      display: none;
+      padding: 24px;
+      text-align: center;
+      background: #fff8cc;
+      border-radius: 26px;
+      border: 2px dashed rgba(255, 174, 0, 0.65);
+      margin-top: 16px;
+    }
+
+    .birthday-mode h2 {
+      font-size: 2rem;
+      color: #d66b00;
+    }
+
+    @media (max-width: 760px) {
+      .countdown {
+        grid-template-columns: repeat(2, 1fr);
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .content {
+        grid-template-columns: 1fr;
+        padding: 22px 18px 28px;
+      }
+
+      .hero { padding: 32px 20px 20px; }
+      .footer-note { padding: 0 18px 26px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <main class="card">
+      <section class="hero">
+        <div class="badge">A birthday countdown made just for you 🎂</div>
+        <h1>Counting down to your birthday</h1>
+        <p class="subtitle">Every day until July 2, you get one little gift to accept. No skipping the cuteness. No speed running the surprises.</p>
+
+        <!-- Put your photo inside the assets folder and name it IMG_1724.jpg -->
+        <img src="assets/IMG_1724.jpg" alt="Her photo" class="main-photo" onerror="this.style.display='none'">
+      </section>
+
+      <section class="countdown" aria-label="Countdown to July 2">
+        <div class="time-box"><span class="number" id="days">0</span><span class="label">Days</span></div>
+        <div class="time-box"><span class="number" id="hours">0</span><span class="label">Hours</span></div>
+        <div class="time-box"><span class="number" id="minutes">0</span><span class="label">Minutes</span></div>
+        <div class="time-box"><span class="number" id="seconds">0</span><span class="label">Seconds</span></div>
+      </section>
+
+      <section class="content">
+        <div class="panel">
+          <h2>Before your birthday gets here</h2>
+          <p>I wanted to give you something small each day, because you deserve to feel special before your birthday, not only on the day itself.</p>
+          <p>Open this once a day, accept your gift, and let the countdown do the rest.</p>
+
+          <div class="ideas">
+            <div class="idea">Today’s rule: you have to smile at least once.</div>
+            <div class="idea">Birthday mission: accept your daily gift.</div>
+            <div class="idea">Final reward: something special on July 2.</div>
+          </div>
+
+          <div class="birthday-mode" id="birthdayMode">
+            <h2>Happy Birthday! 🎉</h2>
+            <p>The countdown is over, but the celebrating starts now. Today is all about you.</p>
+          </div>
+        </div>
+
+        <div class="panel gift-box">
+          <h2>Daily Gift</h2>
+          <div class="gift-emoji" id="giftEmoji">🎁</div>
+          <p id="giftTitle"><strong>One gift available today.</strong></p>
+          <div class="message" id="giftMessage">Press the button to accept today’s gift.</div>
+
+          <div class="button-row">
+            <button class="primary" id="acceptGift">Accept Today’s Gift</button>
+            <button class="secondary" id="resetGift" title="Only use this if you want to restart the tracker.">Restart</button>
+          </div>
+
+          <div class="mini-stats">
+            <div class="stat"><strong id="giftCount">0</strong><span>Gifts accepted</span></div>
+            <div class="stat"><strong id="daysLeftSmall">0</strong><span>Days left</span></div>
+          </div>
+        </div>
+      </section>
+
+      <div class="footer-note">Made for you, one day closer to July 2 💗</div>
+    </main>
+  </div>
+
+  <script>
+    const birthdayMonth = 6; // July, because JavaScript months start at 0
+    const birthdayDay = 2;
+
+    const gifts = [
+      "Gift accepted: one forehead kiss coupon. Redeemable whenever I see you.",
+      "Gift accepted: you get to pick the next place we eat.",
+      "Gift accepted: one playlist made just for you.",
+      "Gift accepted: I owe you your favorite drink.",
+      "Gift accepted: one movie night, your choice, no complaints.",
+      "Gift accepted: one handwritten note coming soon.",
+      "Gift accepted: I owe you flowers, snacks, or both.",
+      "Gift accepted: one surprise date idea is officially reserved.",
+      "Gift accepted: one extra long hug, no time limit.",
+      "Gift accepted: today’s reminder, you are genuinely special to me.",
+      "Gift accepted: one birthday week princess pass.",
+      "Gift accepted: final countdown mode unlocked. Your birthday is almost here."
+    ];
+
+    const emojis = ["🎁", "🌹", "🍓", "💌", "🎬", "☕", "🍰", "💐", "⭐", "🧸", "🎀", "🎂"];
+
+    const daysEl = document.getElementById("days");
+    const hoursEl = document.getElementById("hours");
+    const minutesEl = document.getElementById("minutes");
+    const secondsEl = document.getElementById("seconds");
+    const daysLeftSmall = document.getElementById("daysLeftSmall");
+    const giftCount = document.getElementById("giftCount");
+    const acceptGift = document.getElementById("acceptGift");
+    const resetGift = document.getElementById("resetGift");
+    const giftMessage = document.getElementById("giftMessage");
+    const giftEmoji = document.getElementById("giftEmoji");
+    const giftTitle = document.getElementById("giftTitle");
+    const birthdayMode = document.getElementById("birthdayMode");
+
+    function pad(num) {
+      return String(num).padStart(2, "0");
+    }
+
+    function todayKey() {
+      const now = new Date();
+      return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+    }
+
+    function getBirthdayTarget() {
+      const now = new Date();
+      let target = new Date(now.getFullYear(), birthdayMonth, birthdayDay, 0, 0, 0);
+      if (now > new Date(now.getFullYear(), birthdayMonth, birthdayDay, 23, 59, 59)) {
+        target = new Date(now.getFullYear() + 1, birthdayMonth, birthdayDay, 0, 0, 0);
+      }
+      return target;
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const birthdayStart = new Date(now.getFullYear(), birthdayMonth, birthdayDay, 0, 0, 0);
+      const birthdayEnd = new Date(now.getFullYear(), birthdayMonth, birthdayDay, 23, 59, 59);
+      const isBirthdayToday = now >= birthdayStart && now <= birthdayEnd;
+      const target = getBirthdayTarget();
+      let diff = target - now;
+
+      if (isBirthdayToday) {
+        diff = 0;
+        birthdayMode.style.display = "block";
+        giftTitle.innerHTML = "<strong>Birthday gift available today!</strong>";
+      }
+
+      const totalSeconds = Math.max(0, Math.floor(diff / 1000));
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      daysEl.textContent = days;
+      hoursEl.textContent = hours;
+      minutesEl.textContent = minutes;
+      secondsEl.textContent = seconds;
+      daysLeftSmall.textContent = days;
+    }
+
+    function loadState() {
+      const count = Number(localStorage.getItem("birthdayGiftCount") || "0");
+      const lastAccepted = localStorage.getItem("birthdayGiftLastAccepted") || "";
+      giftCount.textContent = count;
+
+      if (lastAccepted === todayKey()) {
+        acceptGift.disabled = true;
+        giftMessage.textContent = "You already accepted today’s gift. Come back tomorrow for the next one.";
+        giftEmoji.textContent = "💖";
+      } else {
+        acceptGift.disabled = false;
+        giftMessage.textContent = "Press the button to accept today’s gift.";
+        giftEmoji.textContent = emojis[count % emojis.length];
+      }
+    }
+
+    acceptGift.addEventListener("click", () => {
+      const currentCount = Number(localStorage.getItem("birthdayGiftCount") || "0");
+      const nextCount = currentCount + 1;
+      const giftIndex = currentCount % gifts.length;
+
+      localStorage.setItem("birthdayGiftCount", String(nextCount));
+      localStorage.setItem("birthdayGiftLastAccepted", todayKey());
+
+      giftCount.textContent = nextCount;
+      giftEmoji.textContent = emojis[giftIndex];
+      giftMessage.textContent = gifts[giftIndex];
+      acceptGift.disabled = true;
+
+      confettiBurst();
+    });
+
+    resetGift.addEventListener("click", () => {
+      localStorage.removeItem("birthdayGiftCount");
+      localStorage.removeItem("birthdayGiftLastAccepted");
+      loadState();
+    });
+
+    function confettiBurst() {
+      for (let i = 0; i < 36; i++) {
+        const piece = document.createElement("div");
+        piece.textContent = ["💗", "✨", "🎀", "🌸", "🎉"][Math.floor(Math.random() * 5)];
+        piece.style.position = "fixed";
+        piece.style.left = Math.random() * 100 + "vw";
+        piece.style.top = "-20px";
+        piece.style.fontSize = 18 + Math.random() * 22 + "px";
+        piece.style.zIndex = "10";
+        piece.style.pointerEvents = "none";
+        piece.style.transition = "transform 1.8s ease, opacity 1.8s ease";
+        document.body.appendChild(piece);
+        requestAnimationFrame(() => {
+          piece.style.transform = `translateY(${window.innerHeight + 80}px) rotate(${Math.random() * 360}deg)`;
+          piece.style.opacity = "0";
+        });
+        setTimeout(() => piece.remove(), 1900);
+      }
+    }
+
+    function makeHearts() {
+      for (let i = 0; i < 22; i++) {
+        const heart = document.createElement("div");
+        heart.className = "floating-heart";
+        heart.textContent = ["♡", "♥", "💗", "💞"][Math.floor(Math.random() * 4)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = 14 + Math.random() * 28 + "px";
+        heart.style.animationDuration = 7 + Math.random() * 9 + "s";
+        heart.style.animationDelay = Math.random() * 8 + "s";
+        document.body.appendChild(heart);
+      }
+    }
+
+    makeHearts();
+    loadState();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
